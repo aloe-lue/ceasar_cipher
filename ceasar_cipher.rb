@@ -1,43 +1,46 @@
-
 def ceasar_cipher(letter, x)
   shifted_letters = letter.split('').collect do |value|
     ascii_val = value.ord
+    is_ascii_val_lowcase = false
 
-    #=> lowercase letters
-    if ascii_val >= 97 and ascii_val <= 122
-      wrapper = ascii_val
-
-      x.times do |x_val|
-        wrapper += 1
-
-      #=> wraps z to a
-        if wrapper > 122
-          wrapper = 97
-        end
-      end
-
-      ascii_val = wrapper
-      ascii_val
-    elsif ascii_val >= 65 and ascii_val <= 90
-      wrapper = ascii_val
-
-      x.times do |x_val|
-        wrapper += 1
-
-        #=> wraps Z to A 
-        if wrapper > 90
-          wrapper = 65 
-        end
-      end
-
-      ascii_val = wrapper
-      ascii_val
+    if ascii_val.between?(97, 122)
+      #=> lowercase letters
+      is_ascii_val_lowcase = true
+    elsif ascii_val.between?(65, 90)
+      #=> upcase letter
+      is_ascii_val_lowcase = false
     else
-      #=> if character was a symbol then don't add
+      is_ascii_val_lowcase = nil
+    end
+
+    #=> todo: make use of a method to avoid repeating using the x times
+
+    #=> that is lowcase
+    wrapper_val = ascii_val
+    if is_ascii_val_lowcase
+      x.times do |x_val|
+        wrapper_val += 1
+
+        if wrapper_val > 122 #=> if value goes over z then wrap to a
+          wrapper_val = 97
+        end
+      end
+
+      ascii_val = wrapper_val
+    elsif is_ascii_val_lowcase == false
+      x.times do |x_val|
+        wrapper_val += 1
+
+        if wrapper_val > 122 #=> if value goes over Z then wrap to A
+          wrapper_val = 97
+        end
+      end
+      ascii_val = wrapper_val 
+    else
       ascii_val
     end
 
-    ascii_val.chr
+    ascii_val.chr #=> convert it to str
   end
 
   shifted_letters.join
